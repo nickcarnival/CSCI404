@@ -1,18 +1,5 @@
 import sys
 
-class City:
-    """
-    A city class that contains the city, its adjacencies, and their weights
-    """
-    def distance_to(self, city):
-        return 6
-    def __repr__(self):
-        return (str(self.name) + "is adjacent to " + str(self.adjacent) + "with weight: " + self.weight)  
-    def __init__(self, name, adjacent, weight):
-        self.name = name
-        self.adjacent = adjacent
-        self.weight = weight
-
 class Route:
     """
     The route contains the total distance and the cities visited to achieve this route
@@ -50,30 +37,49 @@ def uninformed_search(source, destination, cities):
     """
     This algorithm takes in the source, destination, and array of cities and returns the best route
     """
-    current_city = source
-    route = Route(69)
+    route = Route(69) 
     return route
 
 def parse_input(file_name):
     """
     Parses the input and creates an array of cities and their adjacencies
     """
-    cities = []
+    cities = {}
     with open(file_name, 'r') as f:
         line = f.readline()
          
+        cities = {}
         while line:
             # Leave the loop at the end of the file
             if line == 'END OF INPUT\n':
                 break
-            city1, city2, weight = line.strip().split(' ') 
+            city, adjacency, weight = line.strip().split(' ') 
 
-            temp_city2 = City(city1, city2, weight)
-            temp_city1 = City(city2, city1, weight)
+            adj_weight = {adjacency : weight}
 
-            cities.append(temp_city1)
-            cities.append(temp_city2)
+            # if the city is in cities
+            if cities.get(city, 'f') != 'f':
+                # add adjacency
+                cities[city].append({adjacency : weight})
+                if cities.get(adjacency, 'f') == 'f':
+                    # if the adjacent city is not in the dict
+                    cities[adjacency] = [{city :weight}]
+                else:
+                    # if the adjacent city is in the dict
+                    cities[adjacency].append({city :  weight})
+            # if the city is not in cities
+            elif cities.get(city, 'f') == 'f':
+                # add new city
+                cities[city] = [adj_weight]
+                if cities.get(adjacency, 'f') == 'f':
+                    # if the adjacent city is not in the dict
+                    cities[adjacency] = [{city :weight}]
+                else:
+                    # if the adjacent city is in the dict
+                    cities[adjacency].append({city :  weight})
+
             line = f.readline()
-
+    print((cities))
+    return cities
 if __name__ == "__main__":
     main()

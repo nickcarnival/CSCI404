@@ -1,0 +1,14 @@
+{'Luebeck': [{'Hamburg': '63'}],
+'Hamburg': [{'Luebeck': '63'}, {'Bremen': '116'}, {'Hannover': '153'}, {'Berlin': '291'}],
+'Bremen': [{'Hamburg': '116'}, {'Hannover': '132'}, {'Dortmund': '234'}],
+'Hannover': [{'Hamburg': '153'}, {'Bremen': '132'}, {'Magdeburg': '148'}, {'Kassel': '165'}],
+'Berlin': [{'Hamburg': '291'}, {'Magdeburg': '166'}, {'Dresden': '204'}],
+'Dortmund': [{'Bremen': '234'}, {'Duesseldorf': '69'}, {'Frankfurt': '221'}, {'Saarbruecken': '350'}],
+'Magdeburg': [{'Hannover': '148'}, {'Berlin': '166'}, {'Leipzig': '125'}],
+
+
+
+'Kassel': [{'Hannover': '165'}, {'Frankfurt': '185'}], 'Dresden': [{'Berlin': '204'}, {'Leipzig': '119'}], 'Leipzig': [{'Dresden': '119'}, {'Magdeburg': '125'}, {'Nuremberg': '263'}], 'Duesseldorf': [{'Dortmund': '69'}], 'Frankfurt': [{'Kassel': '185'}, {'Dortmund': '221'}, {'Nuremberg': '222'}, {'Saarbruecken': '177'}, {'Stuttgart': '200'}], 'Nuremberg': [{'Frankfurt': '222'}, {'Leipzig': '263'}, {'Stuttgart': '207'}, {'Munich': '171'}], 'Saarbruecken': [{'Dortmund': '350'}, {'Frankfurt': '177'}, {'Karlsruhe': '143'}], 'Karlsruhe': [{'Saarbruecken': '143'}, {'Stuttgart': '71'}], 'Stuttgart': [{'Karlsruhe': '71'}, {'Frankfurt': '200'}, {'Munich': '215'}, {'Nuremberg': '207'}], 'Munich': [{'Stuttgart': '215'}, {'Nuremberg': '171'}], 'Manchester': [{'Birmingham': '84'}], 'Birmingham': [{'Manchester': '84'}, {'Bristol': '85'}, {'London': '117'}], 'Bristol': [{'Birmingham': '85'}], 'London': [{'Birmingham': '117'}]}
+distance: 69
+route:
+
