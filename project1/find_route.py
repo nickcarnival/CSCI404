@@ -35,8 +35,25 @@ def main():
 
 def uninformed_search(source, destination, cities):
     """
-    This algorithm takes in the source, destination, and array of cities and returns the best route
+    This algorithm takes in the source, destination, and a dictionary of cities and adjacencies 
     """
+    adj_cities = cities[source]
+    done = False
+    seen_cities = []
+    while not done:
+        # go to each adjacent city and look at the weight 
+        # then do this for each city until we find the desired city.
+        for city in adj_cities:
+            if city in seen_cities:
+                # not actually break, we need to adjust the weight of going here
+                print(city)
+                break
+            elif city not in seen_cities:
+                seen_cities.append(city)
+                break
+        adj_cities = cities[destination]
+
+    print(seen_cities)
     route = Route(69) 
     return route
 
@@ -79,7 +96,6 @@ def parse_input(file_name):
                     cities[adjacency].append({city :  weight})
 
             line = f.readline()
-    print((cities))
     return cities
 if __name__ == "__main__":
     main()
