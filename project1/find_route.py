@@ -54,6 +54,7 @@ def uninformed_search(source, destination, cities):
         for i, city in enumerate(adj_cities):
             current_weight = int(list(city.values())[0])
             print('City Name: ', str(list(city.keys())[0]))
+            #TODO: this needs to not exclusively check if the place has been visited
             if ((current_weight < best_weight) and (str(list(city.keys())[0]) not in visited)): 
                 best_weight = current_weight
         # find the next city to go to
