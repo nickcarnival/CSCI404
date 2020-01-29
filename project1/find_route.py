@@ -1,4 +1,5 @@
 import sys
+from queue import PriorityQueue
 
 class Route:
     """
@@ -35,25 +36,29 @@ def main():
 
 def uninformed_search(source, destination, cities):
     """
-    This algorithm takes in the source, destination, and a dictionary of cities and adjacencies 
+    This algorithm takes in the source, destination, and a dictionary of cities and adjacencies basically a smallest cost first algorithm
     """
-    adj_cities = cities[source]
+    #[ {'Bremen' : 14}, {'Frankfurt' : 43} ]
     done = False
-    seen_cities = []
-    while not done:
-        # go to each adjacent city and look at the weight 
-        # then do this for each city until we find the desired city.
-        for city in adj_cities:
-            if city in seen_cities:
-                # not actually break, we need to adjust the weight of going here
-                print(city)
-                break
-            elif city not in seen_cities:
-                seen_cities.append(city)
-                break
-        adj_cities = cities[destination]
+    current_city = source
+    visited = set()
+    best_weight = 9999999999999999999999999
 
-    print(seen_cities)
+    while not done:
+        adj_cities = cities[current_city]
+        print(adj_cities)
+        # find lowest weight neighbor
+        for i, city in enumerate(adj_cities):
+            current_weight = int(list(city.values())[0])
+            if (current_weight < best_weight): best_weight = current_weight
+        # find the next city to go to
+        print('Best Weight:', best_weight)
+        for city in adj_cities:
+            current_weight = (list(city.values())[0])
+            if (current_weight == best_weight):
+                print(city)
+        done = True
+
     route = Route(69) 
     return route
 
