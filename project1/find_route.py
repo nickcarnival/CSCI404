@@ -44,20 +44,23 @@ def uninformed_search(source, destination, cities):
     visited = set()
     best_weight = 9999999999999999999999999
 
-    while not done:
+    debug = 0
+    while debug < 10:
+        debug += 1
+        visited.add(current_city)
+        print(visited)
         adj_cities = cities[current_city]
-        print(adj_cities)
         # find lowest weight neighbor
         for i, city in enumerate(adj_cities):
             current_weight = int(list(city.values())[0])
-            if (current_weight < best_weight): best_weight = current_weight
+            print('City Name: ', str(list(city.keys())[0]))
+            if ((current_weight < best_weight) and (str(list(city.keys())[0]) not in visited)): 
+                best_weight = current_weight
         # find the next city to go to
-        print('Best Weight:', best_weight)
         for city in adj_cities:
             current_weight = (list(city.values())[0])
-            if (current_weight == best_weight):
-                print(city)
-        done = True
+            if (int(current_weight) == int(best_weight)):
+                current_city = str(list(city.keys())[0])
 
     route = Route(69) 
     return route
