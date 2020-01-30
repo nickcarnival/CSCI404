@@ -1,4 +1,5 @@
 import sys
+from queue import PriorityQueue
 
 class Route:
     """
@@ -35,25 +36,33 @@ def main():
 
 def uninformed_search(source, destination, cities):
     """
-    This algorithm takes in the source, destination, and a dictionary of cities and adjacencies 
+    This algorithm takes in the source, destination, and a dictionary of cities and adjacencies basically a smallest cost first algorithm
     """
-    adj_cities = cities[source]
+    #[ {'Bremen' : 14}, {'Frankfurt' : 43} ]
     done = False
-    seen_cities = []
-    while not done:
-        # go to each adjacent city and look at the weight 
-        # then do this for each city until we find the desired city.
-        for city in adj_cities:
-            if city in seen_cities:
-                # not actually break, we need to adjust the weight of going here
-                print(city)
-                break
-            elif city not in seen_cities:
-                seen_cities.append(city)
-                break
-        adj_cities = cities[destination]
+    current_city = source
+    visited = set()
+    best_weight = 9999999999999999999999999
 
-    print(seen_cities)
+    debug = 0
+    while debug < 10:
+        debug += 1
+        visited.add(current_city)
+        print(visited)
+        adj_cities = cities[current_city]
+        # find lowest weight neighbor
+        for i, city in enumerate(adj_cities):
+            current_weight = int(list(city.values())[0])
+            print('City Name: ', str(list(city.keys())[0]))
+            #TODO: this needs to not exclusively check if the place has been visited
+            if ((current_weight < best_weight) and (str(list(city.keys())[0]) not in visited)): 
+                best_weight = current_weight
+        # find the next city to go to
+        for city in adj_cities:
+            current_weight = (list(city.values())[0])
+            if (int(current_weight) == int(best_weight)):
+                current_city = str(list(city.keys())[0])
+
     route = Route(69) 
     return route
 
