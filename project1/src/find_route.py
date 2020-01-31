@@ -1,5 +1,6 @@
 import sys
-import search_components as sc
+import math 
+from PriorityQueue import PriorityQueue2
 
 def main():
     """
@@ -29,30 +30,39 @@ def uninformed_search(source, destination, cities):
     This algorithm takes in the source, destination, and a dictionary of cities and adjacencies basically a smallest cost first algorithm
     """
     #[ {'Bremen' : 14}, {'Frankfurt' : 43} ]
+    current_node = source
+    print('Original Current Node: ', current_node)
+
     done = False
-    current_city = source
+    count = 0
+    smallest_weight = math.inf  
+
     visited = set()
-    best_weight = 9999999999999999999999999
 
-    debug = 0
-    while debug < 10:
-        debug += 1
-        visited.add(current_city)
-        print(visited)
-        adj_cities = cities[current_city]
-        # find lowest weight neighbor
-        for i, city in enumerate(adj_cities):
-            current_weight = int(list(city.values())[0])
-            print('City Name: ', str(list(city.keys())[0]))
-            #TODO: this needs to not exclusively check if the place has been visited
-            if ((current_weight < best_weight) and (str(list(city.keys())[0]) not in visited)): 
-                best_weight = current_weight
-        # find the next city to go to
-        for city in adj_cities:
-            current_weight = (list(city.values())[0])
-            if (int(current_weight) == int(best_weight)):
-                current_city = str(list(city.keys())[0])
+    pq = PriorityQueue2()
 
+    pq.put(0, current_node)
+    while not done:
+        visited.add(current_node)
+        count += 1
+        if count > 7:
+            break
+
+        # set the parent node for all of the children
+        parent_node = {'Parent' : str(current_node)}
+        cities[current_node].append(parent_node)
+
+        # find the lowest weight
+        children_nodes = cities[current_node]
+        for child in children_nodes:
+            current_name = str(list(child.keys())[0])
+            if current_name != 'Parent':
+                current_weight = int(list(child.values())[0])
+
+                # add each of the adj nodes to the PriorityQueue
+                pq.put(current_weight, current_name)
+        cheapest_node = pq.grab()
+        current_node = cheapest_node[1]
     return '\'route\'' 
 
 def parse_input(file_name):
@@ -71,27 +81,28 @@ def parse_input(file_name):
             city, adjacency, weight = line.strip().split(' ') 
 
             adj_weight = {adjacency : weight}
+            city_weight = {city : weight}
 
             # if the city is in cities
             if cities.get(city, 'f') != 'f':
                 # add adjacency
-                cities[city].append({adjacency : weight})
+                cities[city].append(adj_weight)
                 if cities.get(adjacency, 'f') == 'f':
                     # if the adjacent city is not in the dict
-                    cities[adjacency] = [{city :weight}]
+                    cities[adjacency] = [city_weight]
                 else:
                     # if the adjacent city is in the dict
-                    cities[adjacency].append({city :  weight})
+                    cities[adjacency].append(city_weight)
             # if the city is not in cities
             elif cities.get(city, 'f') == 'f':
                 # add new city
                 cities[city] = [adj_weight]
                 if cities.get(adjacency, 'f') == 'f':
                     # if the adjacent city is not in the dict
-                    cities[adjacency] = [{city :weight}]
+                    cities[adjacency] = [city_weight]
                 else:
                     # if the adjacent city is in the dict
-                    cities[adjacency].append({city :  weight})
+                    cities[adjacency].append(city_weight)
 
             line = f.readline()
     return cities
