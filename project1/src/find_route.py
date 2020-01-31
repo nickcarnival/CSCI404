@@ -47,13 +47,18 @@ def uninformed_search(source, destination, cities):
         count += 1
         if count > 7:
             break
-
+        parent_weight = pq.get()[0]
+        print('Parent Weight:', parent_weight)
         # set the parent node for all of the children
         parent_node = {'Parent' : str(current_node)}
         cities[current_node].append(parent_node)
-
+        # at each child node, we want to remove the parent node name and set the weight equal to the child plus the parent weights
         # find the lowest weight
         children_nodes = cities[current_node]
+        for item in cities[current_node]:
+            print(item)
+        #parent_weight = next(item for item in cities[current_node] if item[current_node] == current_node)
+        #print(parent_weight)
         for child in children_nodes:
             current_name = str(list(child.keys())[0])
             if current_name != 'Parent':
@@ -61,7 +66,10 @@ def uninformed_search(source, destination, cities):
 
                 # add each of the adj nodes to the PriorityQueue
                 pq.put(current_weight, current_name)
-        cheapest_node = pq.grab()
+            # if it is a parent node, do something...
+            elif current_name == 'Parent':
+                print('Parent Node')
+        cheapest_node = pq.get()
         current_node = cheapest_node[1]
     return '\'route\'' 
 

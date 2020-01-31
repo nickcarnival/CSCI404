@@ -5,7 +5,7 @@ class PriorityQueue2:
     def put(self, weight, name):
         self.queue.append({weight : name})
     
-    def grab(self):
+    def get(self):
         smallest_weight = math.inf
         # find the smallest weight
         print('Finding Smallest Weight...')
@@ -20,7 +20,7 @@ class PriorityQueue2:
         for item in self.queue:
             if ( int(list(item.keys())[0]) == smallest_weight):
                 smallest_name = str(list(item.values())[0])
-
+        
         # remove the popped element from the queue
         self.queue.remove({smallest_weight : smallest_name})
 
