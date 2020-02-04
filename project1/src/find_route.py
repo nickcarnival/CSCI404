@@ -39,37 +39,42 @@ def uninformed_search(source, destination, cities):
 
     visited = set()
 
-    pq = PriorityQueue2()
+    frontier = PriorityQueue2()
+    # create the graph
 
-    pq.put(0, current_node)
+    frontier.put(0, current_node)
     while not done:
+        print("Current Node:", current_node, "\n")
+        print(frontier)
         visited.add(current_node)
         count += 1
         if count > 7:
             break
-        parent_weight = pq.get()[0]
-        print('Parent Weight:', parent_weight)
+        parent = frontier.get()
+
         # set the parent node for all of the children
-        parent_node = {'Parent' : str(current_node)}
+        parent_weight = parent[0]
+        parent_name = parent[1]
+        parent = str(parent_name) + str(parent_weight)
+        parent_node = {'Parent' : parent}
         cities[current_node].append(parent_node)
+        
         # at each child node, we want to remove the parent node name and set the weight equal to the child plus the parent weights
         # find the lowest weight
         children_nodes = cities[current_node]
-        for item in cities[current_node]:
-            print(item)
-        #parent_weight = next(item for item in cities[current_node] if item[current_node] == current_node)
-        #print(parent_weight)
         for child in children_nodes:
             current_name = str(list(child.keys())[0])
             if current_name != 'Parent':
                 current_weight = int(list(child.values())[0])
 
                 # add each of the adj nodes to the PriorityQueue
-                pq.put(current_weight, current_name)
+                if current_name not in visited:
+                    frontier.put(current_weight, current_name)
             # if it is a parent node, do something...
             elif current_name == 'Parent':
-                print('Parent Node')
-        cheapest_node = pq.get()
+                pass
+        cheapest_node = frontier.get()
+        print("Cheapest Child:", cheapest_node, "\n")
         current_node = cheapest_node[1]
     return '\'route\'' 
 
