@@ -1,5 +1,5 @@
 1. Names and CSM Campus IDs of the students of the project team: 
-Nicholas Carnival, Dave Stone
+Nicholas Carnival, David Stone
 2. What programming language is used:
 Python
 3. What OS is used to compile and run the codes: 
