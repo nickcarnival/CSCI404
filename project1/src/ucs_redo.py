@@ -1,12 +1,14 @@
-import heapq
+# It's getting caught trying to get edges with edges=graph[node], so I'm trying to slice instead for now.
+from queue import PriorityQueue
+from heapq import heappush, heappop
 import sys
-from queue import *
 import sys
 from collections import deque
-input_file = ''
+input_file = 'filepath'
+
 f = open(input_file, "r")
 graph = []
-visited = []
+
 for line in f:
     if "END OF INPUT" in line:
         break
@@ -20,17 +22,21 @@ for line in f:
         graph.append(orig_path)
         graph.append(rev_path)
 
-class PriorityQueue(Queue):
-    def _init(self):
-        self.queue = []
-    def _put(self, city):
-        return heappush(self.queue, city)
-    def _get(self):
-        return heappop(self,queue)
+print(graph)
+
+class queue(PriorityQueue):
+    def __init__(self):
+        PriorityQueue.__init__(self)
+        self.counter = 0
+        
+    def put(self, item):
+        return heappush(self.queue, item)
+    def get(self):
+        return heappop(self.queue)
 
 def find_route(graph, source, destination):
     fringe = set()
-    q = PriorityQueue()
+    q = queue()
     q.put((0, [source]))
     while q.empty() is False:
         weight, route = q.get()
@@ -58,4 +64,6 @@ def results(graph, visited):
         index = [n[0] for n in graph[k]].index(visited[v+1])
         weights = graph[k][index][1]
         print('%s to %s, %s miles' %(k, visited[v+1], weights))
-                        
+
+path = find_route(graph, graph[graph[0][0] == "Berlin"], # slice that has destination in second column])
+                    
