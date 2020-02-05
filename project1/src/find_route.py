@@ -1,9 +1,7 @@
 import sys
 import math 
 from PriorityQueue import PriorityQueue2
-from GraphStructures import Tree
-from GraphStructures import Node
-from GraphStructures import Edge
+from Path import Tree
 
 def main():
     """
@@ -25,86 +23,57 @@ def main():
     # Find the specified route
     source = sys.argv[2]
     dest = sys.argv[3]
-    graph = create_graph(source, cities)
-    #route = uninformed_search(source, dest, cities)
-
-# creates the graph structure
-def create_graph(source, cities):
-    smallest_weight = math.inf  
-    count = 0
-    # for adding to the graph
-    added = set()
-
-    # create the root_node
-    current_node = Node(source, [])
-    tree = Tree(current_node)
-
-    # add all of the children
-    length = 5 #len(cities)
-    while count < length:
-        # add the current node to added set
-        print('Current Node: ', current_node.name, ' Parent: ', current_node.parent)
-        parent_node = current_node
-        added.add(current_node.name)
-
-        for child in cities[current_node.name]:
-            child_weight = int(list(child.values())[0])
-            child_name = str(list(child.keys())[0])
-            if child_name not in added:
-                new_node = Node(child_name, parent=parent_node)
-            else:
-                print(child_name, ' is already in added.\n')
-            print(new_node)
-        count += 1
-
-    print(tree)
-    return tree
+    #graph = create_graph(source, cities)
+    route = uninformed_search(source, dest, cities)
 
 def uninformed_search(source, destination, cities):
     """
     This algorithm takes in the source, destination, and a dictionary of cities and adjacencies basically a smallest cost first algorithm
     """
     #[ {'Bremen' : 14}, {'Frankfurt' : 43} ]
-    current_node = source
-    print('Original Current Node: ', current_node)
-
-    done = False
+    #Bremen to Frankfurt = 455
     count = 0
+    visited = set()
 
     # for the PriorityQueue
-    visited = set()
     frontier = PriorityQueue2()
-    frontier.put(0, current_node)
-    while not done:
-        visited.add(current_node)
-        count += 1
-        if count > 7:
-            break
-        parent = frontier.get()
+    frontier.put(0, source)
 
-        # set the parent node for all of the children
-        parent_weight = parent[0]
-        parent_name = parent[1]
-        parent = str(parent_name) + str(parent_weight)
-        parent_node = {'Parent' : parent}
-        cities[current_node].append(parent_node)
-        
-        # at each child node, we want to remove the parent node name and set the weight equal to the child plus the parent weights
-        # find the lowest weight
-        children_nodes = cities[current_node]
-        for child in children_nodes:
-            current_name = str(list(child.keys())[0])
-            if current_name != 'Parent':
-                current_weight = int(list(child.values())[0])
+    current_name = frontier.get()[1]
+    paths = []
 
-                # add each of the adj nodes to the PriorityQueue
-                if current_name not in visited:
-                    frontier.put(current_weight, current_name)
-            # if it is a parent node, do something...
-            elif current_name == 'Parent':
-                pass
-        cheapest_node = frontier.get()
-        current_node = cheapest_node[1]
+    # initialize paths
+    for child in cities[current_name]:
+        child_name = str(list(child.keys())[0])
+        child_weight = int(list(child.values())[0])
+        current_path = ( current_name, [{child_name : child_weight}], child_weight) 
+
+        if current_path not in paths:
+            # create a new path
+            paths.append(current_path)
+        frontier.put(child_weight, child_name)
+    visited.add(current_name)
+    next_node = frontier.get() 
+
+    # now we know that each node is in a path
+    parent_name = current_name
+    current_name = next_node[1]
+    while current_name != destination:
+
+        for child in cities[current_name]:
+            # search for our current path
+            child_name = str(list(child.keys())[0])
+            child_weight = int(list(child.values())[0])
+            temp_tuple = (parent_name, [{current_name : 116}], 116)
+            old_path = paths[paths.index(temp_tuple)]
+            print('Old:', old_path)
+            new_path = old_path
+            new_path[1].append({'Test' : 1}) 
+            print('New: ', new_path)
+            if child_name not in visited:
+                print(current_name, '\'s child is: ', child) 
+        break
+
     return '\'route\'' 
 
 def parse_input(file_name):
@@ -148,5 +117,6 @@ def parse_input(file_name):
 
             line = f.readline()
     return cities
+
 if __name__ == "__main__":
     main()

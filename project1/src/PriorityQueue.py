@@ -7,6 +7,7 @@ class PriorityQueue2:
     
     def get(self):
         smallest_weight = math.inf
+        smallest_name = "Error"
         # find the smallest weight
         for item in self.queue:
             current_weight = int(list(item.keys())[0])
@@ -16,7 +17,7 @@ class PriorityQueue2:
 
         # find the name of the element with the smallest weight
         for item in self.queue:
-            if ( int(list(item.keys())[0]) == smallest_weight):
+            if ( int(list(item.keys())[0]) == int(smallest_weight)):
                 smallest_name = str(list(item.values())[0])
         
         # remove the popped element from the queue
@@ -24,6 +25,10 @@ class PriorityQueue2:
 
         smallest_node = (smallest_weight, smallest_name)
         return smallest_node
+
+    def isEmpty(self):
+        return True if self.queue == [] else False
+
     def __repr__(self):
         return_statement = "Name : Weight...\n"
         for item in self.queue:
