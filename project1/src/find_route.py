@@ -1,6 +1,9 @@
 import sys
 import math 
 from PriorityQueue import PriorityQueue2
+from GraphStructures import Tree
+from GraphStructures import Node
+from GraphStructures import Edge
 
 def main():
     """
@@ -22,8 +25,40 @@ def main():
     # Find the specified route
     source = sys.argv[2]
     dest = sys.argv[3]
-    route = uninformed_search(source, dest, cities)
-    print(route)
+    graph = create_graph(source, cities)
+    #route = uninformed_search(source, dest, cities)
+
+# creates the graph structure
+def create_graph(source, cities):
+    smallest_weight = math.inf  
+    count = 0
+    # for adding to the graph
+    added = set()
+
+    # create the root_node
+    current_node = Node(source, [])
+    tree = Tree(current_node)
+
+    # add all of the children
+    length = 5 #len(cities)
+    while count < length:
+        # add the current node to added set
+        print('Current Node: ', current_node.name, ' Parent: ', current_node.parent)
+        parent_node = current_node
+        added.add(current_node.name)
+
+        for child in cities[current_node.name]:
+            child_weight = int(list(child.values())[0])
+            child_name = str(list(child.keys())[0])
+            if child_name not in added:
+                new_node = Node(child_name, parent=parent_node)
+            else:
+                print(child_name, ' is already in added.\n')
+            print(new_node)
+        count += 1
+
+    print(tree)
+    return tree
 
 def uninformed_search(source, destination, cities):
     """
@@ -35,17 +70,12 @@ def uninformed_search(source, destination, cities):
 
     done = False
     count = 0
-    smallest_weight = math.inf  
 
+    # for the PriorityQueue
     visited = set()
-
     frontier = PriorityQueue2()
-    # create the graph
-
     frontier.put(0, current_node)
     while not done:
-        print("Current Node:", current_node, "\n")
-        print(frontier)
         visited.add(current_node)
         count += 1
         if count > 7:
@@ -74,7 +104,6 @@ def uninformed_search(source, destination, cities):
             elif current_name == 'Parent':
                 pass
         cheapest_node = frontier.get()
-        print("Cheapest Child:", cheapest_node, "\n")
         current_node = cheapest_node[1]
     return '\'route\'' 
 
