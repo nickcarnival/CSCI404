@@ -1,40 +1,43 @@
-import math
-
-class Tree:
-    """
-    A tree is an arangement of nodes and edges 
-    """
-    # a tree must be initialized with a parent node
-    def __init__(self, source):
-        self.source = source
+class Graph(object):
+    def __init__(self, graph):
+        self.edges = {}
+        self.weights = {}
+        self.__graph = graph
+        
+    def nodes(self):
+        return list(self.__graph.keys())
     
-    # adding a node will 
-    def add_node(self, node):
-
-
-# each node needs to know it's parent
-class Node:
-    # every node has a list of adjacencies
-    # adjacencies are other nodes
-    # leaf nodes may have no adjacencies
-    adjacencies = []
-    smallest_weight = math.inf
-
-    def __init__(self, parent, adjacencies):
-        self.adjacencies.append(adjacencies)
-        self.parent = parent
-    def add_edge(self, adj):
-        self.adj.append(adj)
-    def cheapest_child(self):
-        for item in self.adjacencies:
-            if item.weight
-
-class Edge:
-    """
-    An edge is a weighted path from a parent node to a child node
-    self is the child
-    """
-    def __init__(self,child, parent, weight):
-        self.parent = parent
-        self.child = child 
-        self.weight = weight
+    def neighbors(self):
+        return self.__find_neighbors()
+    
+    def add_node(self,node):
+        if node not in self.__graph:
+            self.__graph_dict[node] = []
+    
+    def add_neighbor(self, neighbor):
+        neighbor = set(neighbor)
+        (node1, node2) = tuple(neighbor)
+        if node1 in self.__graph:
+            self.__graph[node1].append(node2)
+        else:
+            self.__graph[node1] = [node2]
+            
+    def __find_neighbors(self):
+        neighbors = []
+        for node in self.__graph:
+            for neighbor in self.__graph[node]:
+                if {neighbor, node} not in neighbors:
+                    neighbors.append({node, neighbor})
+        return neighbors
+    
+    def __str__(self):
+        response = "Nodes: "
+        for n in self.__graph:
+            response += str(n) + " "
+            response += "\nneighbors: "
+            for neighbor in self.__find_neighbors():
+                reponse += str(neighbor) + " "
+            return response
+        
+# g = Graph(FileName)
+# print(g.nodes())
