@@ -42,10 +42,27 @@ def uninformed_search(source, destination, cities):
     frontier = PriorityQueue2()
     # create the graph
 
-    frontier.put(0, current_node)
-    while not done:
+    frontier.put((0, [current_node])
+    while frontier.empty() is False:
         print("Current Node:", current_node, "\n")
         print(frontier)
+        weight, route = frontier.get()
+        if node not in visited:
+            visited.add(node)
+            if node == destination:
+                route.append(weight)
+                return route
+            edges = graph[node]
+            for edge in [edge[0] for edge in edges]:
+                if edge not in visited:
+                    current_node = [n[0] for n in graph[node]].index(edge)
+                    cost = weight + int(graph[node][current_node][1])
+                    current_route = route[:]
+                    current_route.append(edge)
+                    queue.put((cost, current_route))
+
+
+        #---------------------------------------------------------------
         visited.add(current_node)
         count += 1
         if count > 7:
