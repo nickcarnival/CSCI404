@@ -1,4 +1,3 @@
-# It's getting caught trying to get edges with edges=graph[node], so I'm trying to slice instead for now.
 import sys
 from queue import PriorityQueue
 
@@ -57,7 +56,9 @@ def find_route(graph, source, destination):
                     last_route = route[:]
                     last_route.append(edge)
                     q.put((path_cost, last_route))
-
+                    if q.empty() is True:
+                        print("No Path Found")
+                    
 def results(graph, visited):
     weights = visited[-1]
     print('Distance: %s' %(distance))
