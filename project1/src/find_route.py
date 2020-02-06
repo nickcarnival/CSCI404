@@ -1,7 +1,9 @@
 import sys
 import math 
+from copy import deepcopy
 from PriorityQueue import PriorityQueue2
-from Path import Tree
+from PriorityQueue import Node
+from PriorityQueue import Path 
 
 def main():
     """
@@ -24,57 +26,60 @@ def main():
     source = sys.argv[2]
     dest = sys.argv[3]
     #graph = create_graph(source, cities)
-    route = uninformed_search(source, dest, cities)
+    route = ucs(source, dest, cities)
 
-def uninformed_search(source, destination, cities):
+def ucs(source, dest, cities):
     """
     This algorithm takes in the source, destination, and a dictionary of cities and adjacencies basically a smallest cost first algorithm
     """
-    #[ {'Bremen' : 14}, {'Frankfurt' : 43} ]
-    #Bremen to Frankfurt = 455
-    count = 0
+
     visited = set()
-
-    # for the PriorityQueue
-    frontier = PriorityQueue2()
-    frontier.put(0, source)
-
-    current_name = frontier.get()[1]
+    done = False
+    count = 0
+    smallest_weight = math.inf
     paths = []
 
-    # initialize paths
-    for child in cities[current_name]:
-        child_name = str(list(child.keys())[0])
-        child_weight = int(list(child.values())[0])
-        current_path = ( current_name, [{child_name : child_weight}], child_weight) 
+    # add the source node to the PQ
+    frontier = PriorityQueue2()
+    root_node = Node(source, 'NO_PARENT', 0)
 
-        if current_path not in paths:
-            # create a new path
-            paths.append(current_path)
-        frontier.put(child_weight, child_name)
-    visited.add(current_name)
-    next_node = frontier.get() 
+    frontier.put(root_node)
+    parent_weight, parent_name = frontier.get()
+    print(parent_name)
+    # consider current state, and check if if finishes in a goal state 
+    while parent_name != dest:
 
-    # now we know that each node is in a path
-    parent_name = current_name
-    current_name = next_node[1]
-    while current_name != destination:
-
-        for child in cities[current_name]:
-            # search for our current path
+        print('Current Parent:', parent_name, ' weight: ', parent_weight)
+        # lets find out how to print the path that it took to get here
+        # consider all places in the graph that we can get to
+        # get the weights to those nodes
+        for child in cities[parent_name]:
+            # get each childs name and weight
             child_name = str(list(child.keys())[0])
             child_weight = int(list(child.values())[0])
-            temp_tuple = (parent_name, [{current_name : 116}], 116)
-            old_path = paths[paths.index(temp_tuple)]
-            print('Old:', old_path)
-            new_path = old_path
-            new_path[1].append({'Test' : 1}) 
-            print('New: ', new_path)
-            if child_name not in visited:
-                print(current_name, '\'s child is: ', child) 
-        break
 
+            if child_name not in visited:
+                node = Node(child_name, parent_name, child_weight + parent_weight)
+                path = Path(parent_name)
+                path.add_node(node)
+                print(path)
+                frontier.put(node)
+
+        # add current node to the visited list
+        visited.add(parent_name)
+
+        # calculate the total cost of the paths
+
+        # change the current node to the cheapest PATH
+
+        # visit that path next
+
+        # rinse repeat...
+        parent_weight, parent_name = frontier.get()
     return '\'route\'' 
+
+def calc_path_weight(parent_struct):
+    return 4
 
 def parse_input(file_name):
     """

@@ -1,9 +1,12 @@
 import math
 
 class PriorityQueue2:
+    """
+    Takes in Node
+    """
     queue = []
-    def put(self, weight, name):
-        self.queue.append({weight : name})
+    def put(self, node):
+        self.queue.append({node.weight : node.name})
     
     def get(self):
         smallest_weight = math.inf
@@ -37,3 +40,45 @@ class PriorityQueue2:
             return_statement += (name + ' : ' + weight + ', ')
         return_statement += '\n'
         return return_statement
+
+# need to have a path that we can add to
+class Node:
+    """
+    A path contains the source node and all of the children
+    """
+    # a path has a list of children and the root node
+    path = {}
+    total_weight = 0
+
+    def __init__(self, name, parent, weight):
+        self.name = name 
+        self.parent = parent
+        self.weight = weight 
+    def __repr__(self):
+        result = str(self.name) + str(self.parent) 
+
+
+class Path:
+    """
+    A path is a list of elements in order that were added
+    """
+    path = []
+    total_dist = 0
+    def __init__(self, root):
+        self.root = root
+
+    def add_node(self, node):
+        self.total_dist += node.weight
+        self.path.append((node.name, node.weight, node.parent))
+    
+    def __repr__(self):
+        if self.path == []:
+            result = 'none'
+        else:
+            result = ''
+            result += 'distance:' + str(self.total_dist) + '\n'
+            result += 'route:\n'
+            for item in self.path:
+                name, parent, weight = item
+                result += str(parent) + ' to ' + str(name) + ', ' + str(weight) + ' km'
+        return result
