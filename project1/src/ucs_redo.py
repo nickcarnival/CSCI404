@@ -1,5 +1,6 @@
 # It's getting caught trying to get edges with edges=graph[node], so I'm trying to slice instead for now.
 import sys
+from PriorityQueue import queue
 
 def main():
     # sys.argv[1] = input_filename
@@ -18,10 +19,11 @@ def main():
 
     # Generate all of the cities
     graph = parse_input(file_name)
-    print(graph)
 
-    path = find_route(graph, graph[graph[0][0] == "Berlin"], ])
+    # TODO: this line causes error right now:
+    #path = find_route(graph, source, dest)
 
+# handles placing the input file into an appropriate data structure
 def parse_input(input_file):
 
     f = open(input_file, "r")
@@ -32,11 +34,15 @@ def parse_input(input_file):
             break
         else:
             cities = line.split()
+
             sources = cities[0]
             destinations = cities[1]
             weight = cities[2]
+
+            # unidirectional graph
             orig_path = [sources, destinations, weight]
             rev_path = [destinations, sources, weight]
+
             graph.append(orig_path)
             graph.append(rev_path)
 
@@ -46,14 +52,18 @@ def find_route(graph, source, destination):
     fringe = set()
     q = queue()
     q.put((0, [source]))
-    while q.empty() is False:
+
+    while not q.empty():
         weight, route = q.get()
         node = route[len(route) -1]
+
         if node not in fringe:
             fringe.add(node)
             if node == destination:
                 route.append(weight)
                 return route
+
+            # graph is a 2D list and not a dict
             edges = graph[node]
             for edge in [edges[0] for edge in edges]:
                 if edge not in fringe:
