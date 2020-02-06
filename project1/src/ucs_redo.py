@@ -24,28 +24,18 @@ def main():
     path = find_route(graph, source, dest)
 
 # handles placing the input file into an appropriate data structure
-def parse_input(input_file):
-
-    f = open(input_file, "r")
-    graph = []
-    for line in f:
-        if "END OF INPUT" in line:
-            break
-        else:
-            cities = line.split()
-
-            sources = cities[0]
-            destinations = cities[1]
-            weight = cities[2]
-
-            # unidirectional graph
-            orig_path = [sources, destinations, weight]
-            rev_path = [destinations, sources, weight]
-
-            graph.append(orig_path)
-            graph.append(rev_path)
-            columns = list(zip(*graph))
-    return graph
+def parse_input(file_name):
+    graph = {}
+    file = open(file_name, 'r')
+    for line in file:
+        if 'END OF INPUT' in line:
+            return graph
+        node1, node2, distance = line.lower().split()
+        graph.setdefault(node1, []).append((node2, distance))
+        graph.setdefault(node2, []).append((node1, distance))
+        
+graph = parse_input(filepath)
+path = []
 
 def find_route(graph, source, destination):
     fringe = set()
