@@ -52,7 +52,11 @@ def find_route(graph, source, destination):
     fringe = set()
     q = queue()
     q.put((0, [source]))
-
+    #
+    source = [x for x in columns[0] if x == "{}".format(source)]
+    destination = [x for x in columns[1] if x == "{}".format(destination)]
+    weights = [x for x in columns[2] if columns[0] == source and columns[1] == destination]
+    #
     while not q.empty():
         weight, route = q.get()
         node = route[len(route) -1]
