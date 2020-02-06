@@ -21,7 +21,7 @@ def main():
     graph = parse_input(file_name)
 
     # TODO: this line causes error right now:
-    #path = find_route(graph, source, dest)
+    path = find_route(graph, source, dest)
 
 # handles placing the input file into an appropriate data structure
 def parse_input(input_file):
