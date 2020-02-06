@@ -49,6 +49,8 @@ def find_route(graph, source, destination):
                 route.append(cost)
                 return route
             edges = graph[node]
+            if q.empty() is True:
+                    print("No Path Found")
             for edge in [edge[0] for edge in edges]:
                 if edge not in frontier:
                     loc = [n[0] for n in graph[node]].index(edge)
@@ -56,8 +58,6 @@ def find_route(graph, source, destination):
                     last_route = route[:]
                     last_route.append(edge)
                     q.put((path_cost, last_route))
-                    if q.empty() is True:
-                        print("No Path Found")
                     
 def results(graph, visited):
     weights = visited[-1]
