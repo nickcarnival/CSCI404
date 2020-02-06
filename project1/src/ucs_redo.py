@@ -1,38 +1,46 @@
 # It's getting caught trying to get edges with edges=graph[node], so I'm trying to slice instead for now.
-from queue import PriorityQueue
-from heapq import heappush, heappop
 import sys
-import sys
-from collections import deque
-input_file = 'filepath'
 
-f = open(input_file, "r")
-graph = []
+def main():
+    # sys.argv[1] = input_filename
+    # sys.argv[2] = origin_city
+    # sys.argv[3] = destination_city
 
-for line in f:
-    if "END OF INPUT" in line:
-        break
-    else:
-        cities = line.split()
-        sources = cities[0]
-        destinations = cities[1]
-        weight = cities[2]
-        orig_path = [sources, destinations, weight]
-        rev_path = [destinations, sources, weight]
-        graph.append(orig_path)
-        graph.append(rev_path)
+    if (len(sys.argv) != 4):
+        print("Not enough arguments")
+        sys.exit()
 
-print(graph)
+    file_name = sys.argv[1]
 
-class queue(PriorityQueue):
-    def __init__(self):
-        PriorityQueue.__init__(self)
-        self.counter = 0
-        
-    def put(self, item):
-        return heappush(self.queue, item)
-    def get(self):
-        return heappop(self.queue)
+    # Find the specified route
+    source = sys.argv[2]
+    dest = sys.argv[3]
+
+    # Generate all of the cities
+    graph = parse_input(file_name)
+    print(graph)
+
+    path = find_route(graph, graph[graph[0][0] == "Berlin"], ])
+
+def parse_input(input_file):
+
+    f = open(input_file, "r")
+    graph = []
+
+    for line in f:
+        if "END OF INPUT" in line:
+            break
+        else:
+            cities = line.split()
+            sources = cities[0]
+            destinations = cities[1]
+            weight = cities[2]
+            orig_path = [sources, destinations, weight]
+            rev_path = [destinations, sources, weight]
+            graph.append(orig_path)
+            graph.append(rev_path)
+
+    return graph
 
 def find_route(graph, source, destination):
     fringe = set()
@@ -65,5 +73,6 @@ def results(graph, visited):
         weights = graph[k][index][1]
         print('%s to %s, %s miles' %(k, visited[v+1], weights))
 
-path = find_route(graph, graph[graph[0][0] == "Berlin"], # slice that has destination in second column])
                     
+if __name__ == "__main__":
+    main()
