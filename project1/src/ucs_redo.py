@@ -28,7 +28,6 @@ def parse_input(input_file):
 
     f = open(input_file, "r")
     graph = []
-
     for line in f:
         if "END OF INPUT" in line:
             break
@@ -45,7 +44,7 @@ def parse_input(input_file):
 
             graph.append(orig_path)
             graph.append(rev_path)
-
+            columns = list(zip(*graph))
     return graph
 
 def find_route(graph, source, destination):
