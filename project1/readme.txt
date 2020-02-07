@@ -5,7 +5,7 @@ Nicholas Carnival, David Stonecipher 10863871
 Python
 
 3. What OS is used to compile and run the codes: 
-Windows or Linux
+Windows or Linux, no compiling required. As long as the computer has the main Python libraries installed (queue, main, math, sys) it should work with just the command line arguments.
 
 4. How the code is structured:
 
