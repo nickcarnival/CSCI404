@@ -23,3 +23,5 @@ and we tried to have no dependencies that weren't standard
 
 General Format: 'python3 find_route.py input_filename origin_city destination_city' 
 Example: 'python find_route.py ./inputs/input.txt Breman Frankfurt'
+
+P.S. If you run './run.sh' you can run our script with the two examples given in the requirements document.
