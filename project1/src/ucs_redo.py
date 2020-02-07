@@ -60,15 +60,9 @@ def find_route(graph, source, destination):
                     last_route.append(edge)
                     q.put((path_cost, last_route))
                     
-def results(graph, visited):
-    weights = visited[-1]
-    print('Distance: %s' %(distance))
-    print('Path: ')
-    for k in visited[:-2]:
-        v = visited.index(k)
-        index = [n[0] for n in graph[k]].index(visited[v+1])
-        weights = graph[k][index][1]
-        print('%s to %s, %s miles' %(k, visited[v+1], weights))
+results = find_route(graph, source, destination)
+print("distance: ", results[-1],"km")
+print("\nroute:", results[:-1])
 
                     
 if __name__ == "__main__":
