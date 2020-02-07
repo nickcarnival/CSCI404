@@ -42,6 +42,8 @@ def print_results(graph, results):
             if previous_node != 'EMPTY':
                 for connection in graph[current_node]:
                     if connection[0] == previous_node:
+                        previous_node = previous_node.lower().capitalize()
+                        current_node = current_node.lower().capitalize()
                         print(previous_node, "to ", current_node, ",", connection[1], "km")
 
             previous_node = current_node
