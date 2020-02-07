@@ -18,6 +18,7 @@ def main():
 
     # Generate all of the cities
     graph = parse_input(file_name)
+    path = []
 
     # TODO: this line causes error right now:
     path = find_route(graph, source, dest)
@@ -25,16 +26,16 @@ def main():
 # handles placing the input file into an appropriate data structure
 def parse_input(file_name):
     graph = {}
+
     file = open(file_name, 'r')
+
     for line in file:
         if 'END OF INPUT' in line:
             return graph
         node1, node2, distance = line.lower().split()
         graph.setdefault(node1, []).append((node2, distance))
         graph.setdefault(node2, []).append((node1, distance))
-        
-graph = parse_input(filepath)
-path = []
+    return graph        
 
 def find_route(graph, source, destination):
     frontier = set()
