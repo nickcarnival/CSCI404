@@ -8,8 +8,18 @@ Python
 Windows or Linux
 
 4. How the code is structured:
+The code all runs from the main method. Main handles the command line arguments and calling all of the other functions.
+The first thing that main does is call parse_input which adds all of the cities and their weights to a python dictionary.
+The return from parse_input is then passed into the find_route method along with the source and destination city.
+This uses a uniform cost search algorithm to find the best route if a route exists. If a route does not exist, it just returns NoneType.
+After the best route has been found, print_results is called which handles output formatting. It will either print the route that
+was taken or it will print an infinite route, as requested.
 
 5. How to run the code:
 You run this code exactly how it is specified in the project requirements.
-General Format: 'python find_route.py input_filename origin_city destination_city' 
+
+Note: This program will only work with python3 because python2 does not have the queue library installed, 
+and we tried to have no dependencies that weren't standard
+
+General Format: 'python3 find_route.py input_filename origin_city destination_city' 
 Example: 'python find_route.py ./inputs/input.txt Breman Frankfurt'
