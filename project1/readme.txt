@@ -1,13 +1,16 @@
 1. Names and CSM Campus IDs of the students of the project team: 
-Nicholas Carnival, David Stonecipher 10863871
+Nicholas Carnival 10798955, David Stonecipher 10863871
 
 2. What programming language is used:
-Python
+Python3
 
 3. What OS is used to compile and run the codes: 
-Windows or Linux, no compiling required. As long as the computer has the main Python libraries installed (queue, main, math, sys) it should work with just the command line arguments.
+Windows or Linux, no compiling required. 
+As long as the computer has the main Python libraries installed (queue, main, math, sys) it should work with just the command line arguments.
 
 4. How the code is structured:
+The script files is in the src directory.
+
 The code all runs from the main method. Main handles the command line arguments and calling all of the other functions.
 The first thing that main does is call parse_input which adds all of the cities and their weights to a python dictionary.
 The return from parse_input is then passed into the find_route method along with the source and destination city.
@@ -22,6 +25,7 @@ Note: This program will only work with python3 because python2 does not have the
 and we tried to have no dependencies that weren't standard
 
 General Format: 'python3 find_route.py input_filename origin_city destination_city' 
-Example: 'python find_route.py ./inputs/input.txt Breman Frankfurt'
 
-P.S. If you run './run.sh' you can run our script with the two examples given in the requirements document.
+Example: 'python3 src/find_route.py inputs/input.txt Bremen Frankfurt'
+
+All of these arguments are relative directories.

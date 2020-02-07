@@ -32,13 +32,12 @@ def print_results(graph, results):
     """
     if results is not None:
         print("distance: ", results[-1],"km")
-
+        print("route:")
         print_statement = ''
 
         previous_node = 'EMPTY'
 
         for current_node in results[:-1]:
-
             if previous_node != 'EMPTY':
                 for connection in graph[current_node]:
                     if connection[0] == previous_node:
@@ -46,7 +45,7 @@ def print_results(graph, results):
                         current_node = current_node.lower().capitalize()
                         print(previous_node, "to ", current_node, ",", connection[1], "km")
 
-            previous_node = current_node
+            previous_node = current_node.upper()
     else:
         print("distance: infinity")
         print("route:")
