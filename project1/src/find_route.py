@@ -2,9 +2,9 @@ import sys
 from queue import PriorityQueue
 
 def main():
-    # sys.argv[1] = input_filename
-    # sys.argv[2] = origin_city
-    # sys.argv[3] = destination_city
+    """
+    Handles getting the system arguments and calling all of the functions
+    """
 
     if (len(sys.argv) != 4):
         print("Not enough arguments")
@@ -12,19 +12,24 @@ def main():
 
     file_name = sys.argv[1]
 
-    # Find the specified route
+    # Make all cities uppercase
     source = str(sys.argv[2]).upper()
     destination = str(sys.argv[3]).upper()
 
     # Generate all of the cities
     graph = parse_input(file_name)
-    path = []
 
-    # TODO: this line causes error right now:
+    # Find the path from source to destination
     results = find_route(graph, source, destination)
+
+    # Print the path in the expected format
     print_results(graph, results)
 
 def print_results(graph, results):
+    """
+    print_results takes in a graph and the results
+    it then parses those results and prints the weight for each path taken
+    """
     if results is not None:
         print("distance: ", results[-1],"km")
 
@@ -45,8 +50,10 @@ def print_results(graph, results):
         print("route:")
         print("none")
 
-# handles placing the input file into an appropriate data structure
 def parse_input(file_name):
+    """
+    Takes in the input file and converts it to the appropriate data structure
+    """
     graph = {}
 
     file = open(file_name, 'r')
