@@ -13,15 +13,17 @@ def main():
     file_name = sys.argv[1]
 
     # Find the specified route
-    source = sys.argv[2]
-    dest = sys.argv[3]
+    source = str(sys.argv[2]).upper()
+    dest = str(sys.argv[3]).upper()
 
     # Generate all of the cities
     graph = parse_input(file_name)
     path = []
 
     # TODO: this line causes error right now:
-    path = find_route(graph, source, dest)
+    results = find_route(graph, source, dest)
+    print("distance: ", results[-1], " km")
+    print("\nroute: ", results[:-1])
 
 # handles placing the input file into an appropriate data structure
 def parse_input(file_name):
@@ -33,9 +35,12 @@ def parse_input(file_name):
         if 'END OF INPUT' in line:
             return graph
         node1, node2, distance = line.lower().split()
+
+        node1 = node1.upper()
+        node2 = node1.upper()
+
         graph.setdefault(node1, []).append((node2, distance))
         graph.setdefault(node2, []).append((node1, distance))
-    return graph        
 
 def find_route(graph, source, destination):
     frontier = set()
@@ -61,14 +66,17 @@ def find_route(graph, source, destination):
                     q.put((path_cost, last_route))
                     
 def results(graph, visited):
-    weights = visited[-1]
-    print('Distance: %s' %(distance))
-    print('Path: ')
-    for k in visited[:-2]:
-        v = visited.index(k)
-        index = [n[0] for n in graph[k]].index(visited[v+1])
-        weights = graph[k][index][1]
-        print('%s to %s, %s miles' %(k, visited[v+1], weights))
+    if visited is None:
+        weights = visited[-1]
+        print('Distance: %s' %(distance))
+        print('Path: ')
+        for k in visited[:-2]:
+            v = visited.index(k)
+            index = [n[0] for n in graph[k]].index(visited[v+1])
+            weights = graph[k][index][1]
+            print('%s to %s, %s miles' %(k, visited[v+1], weights))
+    else:
+        print('Visited is Empty')
 
                     
 if __name__ == "__main__":
