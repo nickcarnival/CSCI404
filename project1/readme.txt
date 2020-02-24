@@ -1,5 +1,5 @@
 1. Names and CSM Campus IDs of the students of the project team: 
-Nicholas Carnival 10798955, David Stonecipher 10863871
+Nicholas Carnival, David Stonecipher
 
 2. What programming language is used:
 Python3
