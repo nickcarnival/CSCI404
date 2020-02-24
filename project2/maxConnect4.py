@@ -9,7 +9,8 @@ from MaxConnect4Game import *
 
 def oneMoveGame(currentGame):
     if currentGame.pieceCount == 42:    # Is the board full already?
-        print('BOARD FULL\n\nGame Over!\n') sys.exit(0)
+        print('BOARD FULL\n\nGame Over!\n') 
+        sys.exit(0)
         currentGame.aiPlay(0) # Make a move (only random is implemented)
     
     print('Game state after move:')
@@ -22,12 +23,19 @@ def oneMoveGame(currentGame):
     currentGame.gameFile.close()
 
 
-def interactiveGame(currentGame):
+def interactiveGame(currentGame, first):
     # Fill me in
     if currentGame.pieceCount == 42:    # Is the board full already?
-        print('BOARD FULL\n\nGame Over!\n') sys.exit(0)
+        print('BOARD FULL\n\nGame Over!\n') 
+        sys.exit(0)
         currentGame.aiPlay(1)
 
+    if first == 'computer-next':
+        currentGame.printGameBoard()
+    elif first == 'player-next':
+        currentGame.printGameBoardToFile()
+
+    print("Which column would you like to place your piece in?")
     
     sys.exit('Interactive mode is currently not implemented')
 
@@ -70,8 +78,9 @@ def main(argv):
     print('Score: Player 1 = %d, Player 2 = %d\n' % (currentGame.player1Score, currentGame.player2Score))
 
     if game_mode == 'interactive':
-        interactiveGame(currentGame) # Be sure to pass whatever else you need from the command line
-    else: # game_mode == 'one-move'
+        firstPlayer = argv[3]
+        interactiveGame(currentGame, firstPlayer) # Be sure to pass whatever else you need from the command line
+    elif game_mode == 'one-move':
         # Set up the output file
         outFile = argv[3]
         try:

@@ -48,8 +48,8 @@ class maxConnect4Game:
                     return 1
 
     # The AI section. Currently plays randomly.
-    def aiPlay(self, difficulty):
-        if (difficulty == 0):
+    def aiPlay(self, algorithm):
+        if (algorithm == 0):
             randColumn = random.randrange(0,7)
             result = self.playPiece(randColumn)
             if not result:
@@ -61,7 +61,14 @@ class maxConnect4Game:
                 elif self.currentTurn == 2:
                     self.currentTurn = 1
         # 1 is minimax
-        elif(difficulty == 1):
+        elif(algorithm == 1):
+            print("minimax not implemented")
+        # 2 is alpha-beta 
+        elif(algorithm == 2):
+            print("alpha-beta not implemented")
+        # 3 is alpha-beta 
+        elif(algorithm == 3):
+            print("")
 
 
     # Calculate the number of 4-in-a-row each player has
