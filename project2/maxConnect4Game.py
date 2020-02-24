@@ -24,13 +24,13 @@ class maxConnect4Game:
 
     # Output current game status to console
     def printGameBoard(self):
-        print ' -----------------'
+        print(' -----------------')
         for i in range(6):
-            print ' |',
+            print(' |', end=" ")
             for j in range(7):
-                print('%d' % self.gameBoard[i][j]),
-            print '| '
-        print ' -----------------'
+                print('%d' % self.gameBoard[i][j], end=" ")
+            print('| ')
+        print(' -----------------')
 
     # Output current game status to file
     def printGameBoardToFile(self):
@@ -48,22 +48,26 @@ class maxConnect4Game:
                     return 1
 
     # The AI section. Currently plays randomly.
-    def aiPlay(self):
-        randColumn = random.randrange(0,7)
-        result = self.playPiece(randColumn)
-        if not result:
-            self.aiPlay()
-        else:
-            print('\n\nmove %d: Player %d, column %d\n' % (self.pieceCount, self.currentTurn, randColumn+1))
-            if self.currentTurn == 1:
-                self.currentTurn = 2
-            elif self.currentTurn == 2:
-                self.currentTurn = 1
+    def aiPlay(self, difficulty):
+        if (difficulty == 0):
+            randColumn = random.randrange(0,7)
+            result = self.playPiece(randColumn)
+            if not result:
+                self.aiPlay()
+            else:
+                print('\n\nmove %d: Player %d, column %d\n' % (self.pieceCount, self.currentTurn, randColumn+1))
+                if self.currentTurn == 1:
+                    self.currentTurn = 2
+                elif self.currentTurn == 2:
+                    self.currentTurn = 1
+        # 1 is minimax
+        elif(difficulty == 1):
+
 
     # Calculate the number of 4-in-a-row each player has
     def countScore(self):
-        self.player1Score = 0;
-        self.player2Score = 0;
+        self.player1Score = 0
+        self.player2Score = 0
 
         # Check horizontally
         for row in self.gameBoard:
