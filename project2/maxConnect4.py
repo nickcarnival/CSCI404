@@ -20,7 +20,7 @@ def oneMoveGame(currentGame):
     print('Score: Player 1 = %d, Player 2 = %d\n' % (currentGame.player1Score, currentGame.player2Score))
 
     currentGame.printGameBoardToFile()
-    currentGame.gameFile.close()
+    currentGame.inputFile.close()
 
 
 def interactiveGame(currentGame, first, outFile):
@@ -35,10 +35,8 @@ def interactiveGame(currentGame, first, outFile):
     elif first == 'player-next':
         currentGame.printGameBoardToFile()
 
-    print("Which column would you like to place your piece in?")
+    userChoice = input("Which column would you like to place your piece in?")
     
-    sys.exit('Interactive mode is currently not implemented')
-
 
 def main(argv):
     # Make sure we have enough command-line arguments
@@ -58,15 +56,15 @@ def main(argv):
 
     # Try to open the input file
     try:
-        currentGame.gameFile = open(inFile, 'r')
+        currentGame.inputFile = open(inFile, 'r')
     except IOError:
         sys.exit("\nError opening input file.\nCheck file name.\n")
 
     # Read the initial game state from the file and save in a 2D list
-    file_lines = currentGame.gameFile.readlines()
+    file_lines = currentGame.inputFile.readlines()
     currentGame.gameBoard = [[int(char) for char in line[0:7]] for line in file_lines[0:-1]]
     currentGame.currentTurn = int(file_lines[-1][0])
-    currentGame.gameFile.close()
+    currentGame.inputFile.close()
 
     print('\nMaxConnect-4 game\n')
     print('Game state before move:')
@@ -88,7 +86,7 @@ def main(argv):
         # Set up the output file
         outFile = argv[3]
         try:
-            currentGame.gameFile = open(outFile, 'w')
+            currentGame.inputFile= open(outFile, 'w')
         except:
             sys.exit('Error opening output file.')
         oneMoveGame(currentGame) # Be sure to pass any other arguments from the command line you might need.

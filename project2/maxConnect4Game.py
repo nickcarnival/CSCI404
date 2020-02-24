@@ -15,7 +15,9 @@ class maxConnect4Game:
         self.player1Score = 0
         self.player2Score = 0
         self.pieceCount = 0
-        self.gameFile = None
+        self.inputFile = None
+        self.computerFile = open("computer.txt", "w") 
+        self.humanFile = open("human.txt", "w") 
         random.seed()
 
     # Count the number of pieces already played
@@ -33,10 +35,20 @@ class maxConnect4Game:
         print(' -----------------')
 
     # Output current game status to file
-    def printGameBoardToFile(self):
-        for row in self.gameBoard:
-            self.gameFile.write(''.join(str(col) for col in row) + '\r\n')
-        self.gameFile.write('%s\r\n' % str(self.currentTurn))
+    def printGameBoardToFile(self, file=None):
+        if file == "human":
+            for row in self.gameBoard:
+                self.humanFile.write(''.join(str(col) for col in row) + '\r\n')
+            self.humanFile.write('%s\r\n' % str(self.currentTurn))
+        elif file =="computer":
+            for row in self.gameBoard:
+                self.computerFile.write(''.join(str(col) for col in row) + '\r\n')
+            self.computerFile.write('%s\r\n' % str(self.currentTurn))
+        else:
+            for row in self.gameBoard:
+                self.inputFile.write(''.join(str(col) for col in row) + '\r\n')
+            self.inputFile.write('%s\r\n' % str(self.currentTurn))
+
 
     # Place the current player's piece in the requested column
     def playPiece(self, column):
