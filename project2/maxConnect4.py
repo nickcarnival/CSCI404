@@ -23,7 +23,7 @@ def oneMoveGame(currentGame):
     currentGame.gameFile.close()
 
 
-def interactiveGame(currentGame, first):
+def interactiveGame(currentGame, first, outFile):
     # Fill me in
     if currentGame.pieceCount == 42:    # Is the board full already?
         print('BOARD FULL\n\nGame Over!\n') 
@@ -79,7 +79,11 @@ def main(argv):
 
     if game_mode == 'interactive':
         firstPlayer = argv[3]
-        interactiveGame(currentGame, firstPlayer) # Be sure to pass whatever else you need from the command line
+        outFile = open("computer.txt", "w")
+
+        interactiveGame(currentGame, firstPlayer, outFile) 
+
+        close(outFile)
     elif game_mode == 'one-move':
         # Set up the output file
         outFile = argv[3]
