@@ -20,23 +20,36 @@ def oneMoveGame(currentGame):
     print('Score: Player 1 = %d, Player 2 = %d\n' % (currentGame.player1Score, currentGame.player2Score))
 
     currentGame.printGameBoardToFile()
-    currentGame.inputFile.close()
-
+    currentGame.gameFile.close()
 
 def interactiveGame(currentGame, first, outFile):
-    # Fill me in
-    if currentGame.pieceCount == 42:    # Is the board full already?
-        print('BOARD FULL\n\nGame Over!\n') 
-        sys.exit(0)
-        currentGame.aiPlay(1)
+    # TODO: Implement these steps
 
-    if first == 'computer-next':
-        currentGame.printGameBoard()
-    elif first == 'player-next':
-        currentGame.printGameBoardToFile()
+    while currentGame.pieceCount != 42:
+        # 1. If computer-next, goto 2
+        if first == 'computer-next':
+            # 2. Print the current board state and score. if the board is full,  exit.
+            currentGame.printGameBoard()
+            # 3. Choose and make the next move.
+            currentGame.aiPlay(0)
+            # 4. Save the current board state in a file called computer.txt (in same format as input file).
+            currentGame.printGameBoardToFile("computer")
+            first = 'player-next'
+        # 1. else goto 5
+        elif first == 'player-next':
+            # 5. Print the current board state and score. If the board is full, exit
+            # 6. Ask the human user to make a move (make sure that the move is valid, otherwise repeat request to the user).
+            # 7. Save the current board state in a file called human.txt (in same format as input file).
+            # 8. goto 2
+            currentGame.printGameBoardToFile()
 
-    userChoice = input("Which column would you like to place your piece in?")
+        # TODO: check if this is valid
+        userChoice = int(input("Which column would you like to place your piece in? \n")) - 1 
+        currentGame.playPiece(userChoice)
+        first = 'computer-next'
     
+    print('BOARD FULL\n\nGame Over!\n') 
+    sys.exit(0)
 
 def main(argv):
     # Make sure we have enough command-line arguments
@@ -56,15 +69,15 @@ def main(argv):
 
     # Try to open the input file
     try:
-        currentGame.inputFile = open(inFile, 'r')
+        currentGame.gameFile = open(inFile, 'r')
     except IOError:
         sys.exit("\nError opening input file.\nCheck file name.\n")
 
     # Read the initial game state from the file and save in a 2D list
-    file_lines = currentGame.inputFile.readlines()
+    file_lines = currentGame.gameFile.readlines()
     currentGame.gameBoard = [[int(char) for char in line[0:7]] for line in file_lines[0:-1]]
     currentGame.currentTurn = int(file_lines[-1][0])
-    currentGame.inputFile.close()
+    currentGame.gameFile.close()
 
     print('\nMaxConnect-4 game\n')
     print('Game state before move:')
@@ -86,7 +99,7 @@ def main(argv):
         # Set up the output file
         outFile = argv[3]
         try:
-            currentGame.inputFile= open(outFile, 'w')
+            currentGame.gameFile= open(outFile, 'w')
         except:
             sys.exit('Error opening output file.')
         oneMoveGame(currentGame) # Be sure to pass any other arguments from the command line you might need.

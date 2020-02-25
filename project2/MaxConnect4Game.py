@@ -2,7 +2,9 @@
 
 # Written by Chris Conly based on C++
 # code provided by Vassilis Athitsos
-# Written to be Python 2.4 compatible for omega
+# Written to be Python 2.4 compatible 
+# edited by Nicholas Carnival to be
+# Python 3 compatible
 
 from copy import copy
 import random
@@ -15,7 +17,7 @@ class maxConnect4Game:
         self.player1Score = 0
         self.player2Score = 0
         self.pieceCount = 0
-        self.inputFile = None
+        self.gameFile = None
         self.computerFile = open("computer.txt", "w") 
         self.humanFile = open("human.txt", "w") 
         random.seed()
@@ -35,20 +37,10 @@ class maxConnect4Game:
         print(' -----------------')
 
     # Output current game status to file
-    def printGameBoardToFile(self, file=None):
-        if file == "human":
-            for row in self.gameBoard:
-                self.humanFile.write(''.join(str(col) for col in row) + '\r\n')
-            self.humanFile.write('%s\r\n' % str(self.currentTurn))
-        elif file =="computer":
-            for row in self.gameBoard:
-                self.computerFile.write(''.join(str(col) for col in row) + '\r\n')
-            self.computerFile.write('%s\r\n' % str(self.currentTurn))
-        else:
-            for row in self.gameBoard:
-                self.inputFile.write(''.join(str(col) for col in row) + '\r\n')
-            self.inputFile.write('%s\r\n' % str(self.currentTurn))
-
+    def printGameBoardToFile(self):
+        for row in self.gameBoard:
+            self.gameFile.write(''.join(str(col) for col in row) + '\r\n')
+        self.gameFile.write('%s\r\n' % str(self.currentTurn))
 
     # Place the current player's piece in the requested column
     def playPiece(self, column):
@@ -58,6 +50,8 @@ class maxConnect4Game:
                     self.gameBoard[i][column] = self.currentTurn
                     self.pieceCount += 1
                     return 1
+        else
+        return 0
 
     # The AI section. Currently plays randomly.
     def aiPlay(self, algorithm):
@@ -80,7 +74,7 @@ class maxConnect4Game:
             print("alpha-beta not implemented")
         # 3 is alpha-beta 
         elif(algorithm == 3):
-            print("")
+            print("algorithm 3 not implemented")
 
 
     # Calculate the number of 4-in-a-row each player has
