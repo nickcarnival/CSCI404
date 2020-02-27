@@ -18,8 +18,9 @@ class maxConnect4Game:
         self.player2Score = 0
         self.pieceCount = 0
         self.gameFile = None
-        self.computerFile = open("computer.txt", "w") 
-        self.humanFile = open("human.txt", "w") 
+        self.outFile = None
+        self.computerFile = None
+        self.humanFile = None
         random.seed()
 
     # Changes the turn...
@@ -32,6 +33,16 @@ class maxConnect4Game:
             self.currentTurn = 1
         else: 
             print("Cannot change turn")
+
+    # closes all files 
+    def clean(self):
+        self.gameFile.close()
+        self.computerFile.close()
+        try:
+            self.outFile.close()
+        except AttributeError:
+            pass
+        self.humanFile.close()
 
     # Count the number of pieces already played
     def checkPieceCount(self):
@@ -49,13 +60,19 @@ class maxConnect4Game:
 
     # Output current game status to file
     def printGameBoardToFile(self, name):
-        for row in self.gameBoard:
-            if name=="computer":
-                self.computerFile.write('%s\r\n' % str(self.currentTurn))
-            elif name=="human":
-                self.humanFile.write('%s\r\n' % str(self.currentTurn))
-            else:
-                self.gameFile.write('%s\r\n' % str(self.currentTurn))
+
+        if name=="computer":
+            for row in self.gameBoard:
+                self.computerFile.write(''.join(str(col) for col in row) + '\r\n')
+            self.computerFile.write('%s\r\n' % str(self.currentTurn))
+        elif name=="human":
+            for row in self.gameBoard:
+                self.humanFile.write(''.join(str(col) for col in row) + '\r\n')
+            self.humanFile.write('%s\r\n' % str(self.currentTurn))
+        else:
+            for row in self.gameBoard:
+                self.outFile.write(''.join(str(col) for col in row) + '\r\n')
+            self.outFile.write('%s\r\n' % str(self.currentTurn))
 
     # Place the current player's piece in the requested column
     def playPiece(self, column):

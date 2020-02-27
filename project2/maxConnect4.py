@@ -11,7 +11,8 @@ def oneMoveGame(currentGame):
     if currentGame.pieceCount == 42:    # Is the board full already?
         print('BOARD FULL\n\nGame Over!\n') 
         sys.exit(0)
-        currentGame.aiPlay(0) # Make a move (only random is implemented)
+
+    currentGame.aiPlay(0) 
     
     print('Game state after move:')
     currentGame.printGameBoard()
@@ -19,8 +20,7 @@ def oneMoveGame(currentGame):
     currentGame.countScore()
     print('Score: Player 1 = %d, Player 2 = %d\n' % (currentGame.player1Score, currentGame.player2Score))
 
-    currentGame.printGameBoardToFile()
-    currentGame.gameFile.close()
+    currentGame.printGameBoardToFile("out")
 
 def validateInput(userInput):
     try:
@@ -42,7 +42,9 @@ def interactiveGame(currentGame, first):
             # Step 3 
             currentGame.aiPlay(0)
             # 4. Save the current board state in a file called computer.txt (in same format as input file).
+            currentGame.computerFile = open("./outputs/computer.txt", "w")
             currentGame.printGameBoardToFile("computer")
+            currentGame.computerFile.close()
             first = 'player-next'
         # Step 1
         elif first == 'player-next':
@@ -61,13 +63,16 @@ def interactiveGame(currentGame, first):
                 if not validateInput(newChoice):
                     cannotPlayPiece = currentGame.playPiece(int(newChoice) - 1)
 
-            # Step 7
+            # Step 7: save the current state
+            currentGame.humanFile = open("./outputs/human.txt", "w")
             currentGame.printGameBoardToFile("human")
+            currentGame.humanFile.close()
 
             # Step 8
             first = 'computer-next'
 
         currentGame.changeTurn()
+    currentGame.clean()
 
 
     
@@ -119,7 +124,7 @@ def main(argv):
         # Set up the output file
         outFile = argv[3]
         try:
-            currentGame.gameFile= open(outFile, 'w')
+            currentGame.outFile = open(outFile, 'w')
         except:
             sys.exit('Error opening output file.')
         oneMoveGame(currentGame) # Be sure to pass any other arguments from the command line you might need.
