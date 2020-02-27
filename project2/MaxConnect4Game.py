@@ -51,7 +51,7 @@ class maxConnect4Game:
                     self.pieceCount += 1
                     return 1
         else
-        return 0
+            return 0
 
     # The AI section. Currently plays randomly.
     def aiPlay(self, algorithm):
