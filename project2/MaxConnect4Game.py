@@ -22,6 +22,17 @@ class maxConnect4Game:
         self.humanFile = open("human.txt", "w") 
         random.seed()
 
+    # Changes the turn...
+    def changeTurn(self):
+        if self.currentTurn == 1: 
+            print("Change turn from player 1 to player 2")
+            self.currentTurn = 2
+        elif self.currentTurn == 2: 
+            print("Change turn from player 2 to player 1")
+            self.currentTurn = 1
+        else: 
+            print("Cannot change turn")
+
     # Count the number of pieces already played
     def checkPieceCount(self):
         self.pieceCount = sum(1 for row in self.gameBoard for piece in row if piece)
@@ -37,35 +48,38 @@ class maxConnect4Game:
         print(' -----------------')
 
     # Output current game status to file
-    def printGameBoardToFile(self):
+    def printGameBoardToFile(self, name):
         for row in self.gameBoard:
-            self.gameFile.write(''.join(str(col) for col in row) + '\r\n')
-        self.gameFile.write('%s\r\n' % str(self.currentTurn))
+            if name=="computer":
+                self.computerFile.write('%s\r\n' % str(self.currentTurn))
+            elif name=="human":
+                self.humanFile.write('%s\r\n' % str(self.currentTurn))
+            else:
+                self.gameFile.write('%s\r\n' % str(self.currentTurn))
 
     # Place the current player's piece in the requested column
     def playPiece(self, column):
-        if not self.gameBoard[0][column]:
-            for i in range(5, -1, -1):
-                if not self.gameBoard[i][column]:
-                    self.gameBoard[i][column] = self.currentTurn
-                    self.pieceCount += 1
-                    return 1
-        else
-            return 0
+        try:
+            if not self.gameBoard[0][column]:
+                for i in range(5, -1, -1):
+                    if not self.gameBoard[i][column]:
+                        self.gameBoard[i][column] = self.currentTurn
+                        self.pieceCount += 1
+                        return 0
+            else:
+                return 1
+        except IndexError:
+            return 1
 
     # The AI section. Currently plays randomly.
     def aiPlay(self, algorithm):
         if (algorithm == 0):
             randColumn = random.randrange(0,7)
             result = self.playPiece(randColumn)
-            if not result:
-                self.aiPlay()
+            if result:
+                self.aiPlay(0)
             else:
                 print('\n\nmove %d: Player %d, column %d\n' % (self.pieceCount, self.currentTurn, randColumn+1))
-                if self.currentTurn == 1:
-                    self.currentTurn = 2
-                elif self.currentTurn == 2:
-                    self.currentTurn = 1
         # 1 is minimax
         elif(algorithm == 1):
             print("minimax not implemented")

@@ -22,20 +22,24 @@ def oneMoveGame(currentGame):
     currentGame.printGameBoardToFile()
     currentGame.gameFile.close()
 
-def interactiveGame(currentGame, first, outFile):
-    # TODO: Implement these steps
+def validateInput(userInput):
+    try:
+        userIntput = int(userInput)
+    except ValueError:
+        print("Not a valid number.")
+        return -1
+    return 0
+
+def interactiveGame(currentGame, first):
 
     while currentGame.pieceCount != 42:
-        # Step 1 
+
+        # Step 2 
+        currentGame.printGameBoard()
+
+        # Step 1
         if first == 'computer-next':
-            # goto 2
-            # 2. Print the current board state and score. 
-            # if the board is full,  exit.
-            currentGame.printGameBoard()
-            if currentGame.pieceCount == 42:
-                print('BOARD FULL\n\nGame Over!\n')
-                sys.exit(0)
-            # 3. Choose and make the next move.
+            # Step 3 
             currentGame.aiPlay(0)
             # 4. Save the current board state in a file called computer.txt (in same format as input file).
             currentGame.printGameBoardToFile("computer")
@@ -43,16 +47,29 @@ def interactiveGame(currentGame, first, outFile):
         # Step 1
         elif first == 'player-next':
             #goto 5
-            # 5. Print the current board state and score. If the board is full, exit
-            # 6. Ask the human user to make a move (make sure that the move is valid, otherwise repeat request to the user).
-            # 7. Save the current board state in a file called human.txt (in same format as input file).
             # 8. goto 2
-            currentGame.printGameBoardToFile()
+            # Step 6
+            userChoice = input("Which column would you like to place your piece in? \n") 
+            while validateInput(userChoice) != 0:
+                userChoice = input("Which column would you like to place your piece in? \n") 
+            
+            cannotPlayPiece = currentGame.playPiece(int(userChoice) - 1)
+            while cannotPlayPiece:
+                print("The column you selected in not valid.")
+                newChoice = input("Which column would you like to place your piece in? \n") 
+                # if valid choice
+                if not validateInput(newChoice):
+                    cannotPlayPiece = currentGame.playPiece(int(newChoice) - 1)
+
+            # Step 7
+            currentGame.printGameBoardToFile("human")
+
+            # Step 8
             first = 'computer-next'
 
-        # TODO: check if this is valid
-        userChoice = int(input("Which column would you like to place your piece in? \n")) - 1 
-        currentGame.playPiece(userChoice)
+        currentGame.changeTurn()
+
+
     
     print('BOARD FULL\n\nGame Over!\n') 
     sys.exit(0)
@@ -96,11 +113,8 @@ def main(argv):
 
     if game_mode == 'interactive':
         firstPlayer = argv[3]
-        outFile = open("computer.txt", "w")
 
-        interactiveGame(currentGame, firstPlayer, outFile) 
-
-        close(outFile)
+        interactiveGame(currentGame, firstPlayer) 
     elif game_mode == 'one-move':
         # Set up the output file
         outFile = argv[3]
