@@ -28,12 +28,12 @@ def interactiveGame(currentGame, first, outFile):
     if currentGame.pieceCount == 42:    # Is the board full already?
         print('BOARD FULL\n\nGame Over!\n') 
         sys.exit(0)
-        currentGame.aiPlay(1)
 
+    # Step 1
     if first == 'computer-next':
-        currentGame.printGameBoard()
+        # goto 2
     elif first == 'player-next':
-        currentGame.printGameBoardToFile()
+        # goto 5
 
     userChoice = input("Which column would you like to place your piece in?")
     
