@@ -48,11 +48,11 @@ def interactiveGame(currentGame, first, outFile):
             # 7. Save the current board state in a file called human.txt (in same format as input file).
             # 8. goto 2
             currentGame.printGameBoardToFile()
+            first = 'computer-next'
 
         # TODO: check if this is valid
         userChoice = int(input("Which column would you like to place your piece in? \n")) - 1 
         currentGame.playPiece(userChoice)
-        first = 'computer-next'
     
     print('BOARD FULL\n\nGame Over!\n') 
     sys.exit(0)

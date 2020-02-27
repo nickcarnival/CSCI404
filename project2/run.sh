@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-
+#!/bin/bash
 if [ ! -z "$1" ]
 then
     if [ "$1" = 'i' ]
