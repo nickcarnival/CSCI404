@@ -23,62 +23,6 @@ class MaxConnect4Game:
         self.outFile = None
         self.previousColumn= None
 
-    def progress(self, row, col, state, length):
-        sum = 0
-        count = 0
-        # count all the almost complete verticals 
-        for i in range(row, 6):
-            if state[i][col] == state[row][col]: count += 1
-            else: break
-
-        if count >= length: sum += 1
-
-        # count all the almost complete horizontals
-        count = 0
-        for j in range(col, 7):
-            if state[row][j] == state[row][col]: count += 1
-            else: break
-
-        if count >= length: sum += 1
-
-        # count all the almost complete diagonals
-        total = 0
-        count = 0
-        j = col
-        for i in range(row, 6):
-            if j > 6: break
-            elif state[i][j] == state[row][col]: count += 1
-            else: break
-            j += 1  
-
-        if count >= length: total += 1
-
-        # check for diagonals with negative slope
-        count = 0
-        j = col
-        for i in range(row, -1, -1):
-            if j > 6: break
-            elif state[i][j] == state[row][col]: count += 1
-            else: break
-            j += 1  # increment column when row is incremented
-
-        if count >= length:
-            total += 1
-
-        sum += total
-
-        return sum
-
-    def countProgress(self, state, other, length):
-        count = 0
-        # for each coin currently in the board
-        for i in range(6):  # for each row
-            for j in range(7):  # for each column of that row
-                if state[i][j] == other:
-                    sum = self.progress(i, j, state, length)
-        return count
-
-    # evaluate how 
     def evaluate(self, board):
         if self.currentTurn == 2:
             other = 1
@@ -87,10 +31,63 @@ class MaxConnect4Game:
             other = 2
             connect4 = self.player1Score - self.player2Score
         # Count progress for threes and twos
-        connect2 = self.countProgress(board, self.currentTurn, 2) - self.countProgress(board, other, 2)
-        connect3 = self.countProgress(board, self.currentTurn, 3) - self.countProgress(board, other, 3)
+        connect2 = self.possibleOutcomes(board, self.currentTurn, 2) - self.possibleOutcomes(board, other, 2)
+        connect3 = self.possibleOutcomes(board, self.currentTurn, 3) - self.possibleOutcomes(board, other, 3)
 
-        return (connect4 * 10 + connect3 * 7 + connect2 * 4)
+        return (connect4 * 8 + connect3 * 4 + connect2 * 2)
+
+    def almostConnected(self, row, col, state, length):
+        grandTotal = 0
+        count = 0
+        # count all the almost complete verticals 
+        for i in range(row, 6):
+            if state[i][col] == state[row][col]: count += 1
+            else: break
+
+        if count >= length: grandTotal += 1
+
+        # count all the almost complete horizontals
+        count = 0
+        for j in range(col, 7):
+            if state[row][j] == state[row][col]: count += 1
+            else: break
+
+        if count >= length: grandTotal += 1
+
+        # count all the almost complete diagonals
+        total = 0
+        count = 0
+        tempCol = col
+        for i in range(row, 6):
+            if tempCol > 6: break
+            elif state[i][tempCol] == state[row][col]: count += 1
+            else: break
+            tempCol += 1  
+
+        if count >= length: total += 1
+
+        # check for diagonals with negative slope
+        count = 0
+        tempCol = col
+        for i in range(row, -1, -1):
+            if tempCol > 6: break
+            elif state[i][tempCol] == state[row][col]: count += 1
+            else: break
+            tempCol += 1  # increment column when row is incremented
+
+        if count >= length: total += 1
+
+        grandTotal += total
+        return grandTotal
+
+    def possibleOutcomes(self, state, other, length):
+        count = 0
+        # for each coin currently in the board
+        for i in range(6):  # for each row
+            for j in range(7):  # for each column of that row
+                if state[i][j] == other:
+                    sum = self.almostConnected(i, j, state, length)
+        return count
 
     def checkPieceCount(self):
         count = 0
