@@ -78,6 +78,7 @@ class MaxConnect4Game:
                     sum = self.progress(i, j, state, length)
         return count
 
+    # evaluate how 
     def evaluate(self, board):
         if self.currentTurn == 2:
             other = 1
@@ -89,7 +90,7 @@ class MaxConnect4Game:
         connect2 = self.countProgress(board, self.currentTurn, 2) - self.countProgress(board, other, 2)
         connect3 = self.countProgress(board, self.currentTurn, 3) - self.countProgress(board, other, 3)
 
-        return (connect4 * 8 + connect3 * 4 + connect2 * 2)
+        return (connect4 * 10 + connect3 * 7 + connect2 * 4)
 
     def checkPieceCount(self):
         count = 0
