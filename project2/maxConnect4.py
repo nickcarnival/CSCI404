@@ -3,17 +3,21 @@
 # Written by Chris Conly based on C++
 # code provided by Dr. Vassilis Athitsos
 # Written to be Python 2.4 compatible for omega
+# edited by Nicholas Carnival to be
+# Python 3 compatible
 
-import sys
 from MaxConnect4Game import *
 
-def oneMoveGame(currentGame):
+import os
+import sys
+
+def oneMoveGame(currentGame, depth):
     if currentGame.pieceCount == 42:    # Is the board full already?
-        print('BOARD FULL\n\nGame Over!\n') 
+        print('BOARD FULL\n\nGame Over!\n')
         sys.exit(0)
 
-    currentGame.aiPlay(0) 
-    
+    currentGame.aiPlay(int(depth))
+
     print('Game state after move:')
     currentGame.printGameBoard()
 
@@ -21,79 +25,72 @@ def oneMoveGame(currentGame):
     print('Score: Player 1 = %d, Player 2 = %d\n' % (currentGame.player1Score, currentGame.player2Score))
 
     currentGame.printGameBoardToFile("out")
+    currentGame.outFile.close()
 
-def validateInput(userInput):
-    try:
-        userIntput = int(userInput)
-    except ValueError:
-        print("Not a valid number.")
-        return -1
-    return 0
+def interactiveGame(currentGame, depth, nextPlayer, inFile):
 
-def interactiveGame(currentGame, first):
+    if nextPlayer == "human-next":
+        while currentGame.checkPieceCount() != 42:
+            try:
+                userMove = int(input("Which column would you like to play your piece in? ( 1-7 )?\n "))
+            except ValueError:
+                print("Not a number")
+                continue
+            if not userMove in range(8):
+                print("Invalid column number!")
+                continue
+            if not currentGame.playPiece(userMove - 1):
+                print("This column is full!")
+                continue
 
-    while currentGame.pieceCount != 42:
+            if os.path.exists(inFile):
+                currentGame.gameFile = open(inFile, 'r')
+            else:
+                sys.exit("\nError opening input file.\nCheck file name.\n")
 
-        # Step 2 
+            print("Your Move:")
+            currentGame.printGameBoard()
+            if currentGame.checkPieceCount() != 42:
+                if currentGame.currentTurn == 1: currentGame.currentTurn = 2
+                elif currentGame.currentTurn == 2: currentGame.currentTurn = 1
+                currentGame.aiPlay(int(depth))
+                print("Computer's Move:")
+                currentGame.printGameBoard()
+                currentGame.countScore()
+                print('Score: Player 1 = %d, Player 2 = %d\n' % (currentGame.player1Score, currentGame.player2Score))
+    else:
+        currentGame.aiPlay(int(depth))
         currentGame.printGameBoard()
+        currentGame.countScore()
+        print('Score: Player 1 = %d, Player 2 = %d\n' % (currentGame.player1Score, currentGame.player2Score))
+        interactiveGame(currentGame, depth, "human-next", inFile)
 
-        # Step 1
-        if first == 'computer-next':
-            # Step 3 
-            currentGame.aiPlay(0)
-            # 4. Save the current board state in a file called computer.txt (in same format as input file).
-            currentGame.computerFile = open("./outputs/computer.txt", "w")
-            currentGame.printGameBoardToFile("computer")
-            currentGame.computerFile.close()
-            first = 'player-next'
-        # Step 1
-        elif first == 'player-next':
-            #goto 5
-            # 8. goto 2
-            # Step 6
-            userChoice = input("Which column would you like to place your piece in? \n") 
-            while validateInput(userChoice) != 0:
-                userChoice = input("Which column would you like to place your piece in? \n") 
-            
-            cannotPlayPiece = currentGame.playPiece(int(userChoice) - 1)
-            while cannotPlayPiece:
-                print("The column you selected in not valid.")
-                newChoice = input("Which column would you like to place your piece in? \n") 
-                # if valid choice
-                if not validateInput(newChoice):
-                    cannotPlayPiece = currentGame.playPiece(int(newChoice) - 1)
+    if currentGame.checkPieceCount() == 42:    # Is the board full already?
+        print('BOARD FULL\n\nGame Over!\n')
 
-            # Step 7: save the current state
-            currentGame.humanFile = open("./outputs/human.txt", "w")
-            currentGame.printGameBoardToFile("human")
-            currentGame.humanFile.close()
+    currentGame.countScore()
 
-            # Step 8
-            first = 'computer-next'
-
-        currentGame.changeTurn()
-    currentGame.clean()
-
-
+    print('Score: Player 1 = %d, Player 2 = %d\n' % (currentGame.player1Score, currentGame.player2Score))
     
-    print('BOARD FULL\n\nGame Over!\n') 
     sys.exit(0)
+
+
 
 def main(argv):
     # Make sure we have enough command-line arguments
     if len(argv) != 5:
         print('Four command-line arguments are needed:')
-        print('Usage: %s interactive [input_file] [computer-next/human-next] [depth]' % argv[0])
-        print('or: %s one-move [input_file] [output_file] [depth]' % argv[0])
-        sys.exit(2)
+        print('Usage: \'python3 %s interactive [input_file] [computer-next/human-next] [depth]\'' % argv[0])
+        print('or: \'python3 %s one-move [input_file] [output_file] [depth]\'' % argv[0])
+        sys.exit(-1)
 
-    game_mode, inFile = argv[1:3]
+    game_mode, inFile, nextPlayer, depth = argv[1:5]
 
-    if not game_mode == 'interactive' and not game_mode == 'one-move':
+    if game_mode != 'interactive' and game_mode != 'one-move':
         print('%s is an unrecognized game mode' % game_mode)
-        sys.exit(2)
+        sys.exit(-1)
 
-    currentGame = maxConnect4Game() # Create a game
+    currentGame = MaxConnect4Game() # Create a game
 
     # Try to open the input file
     try:
@@ -107,28 +104,24 @@ def main(argv):
     currentGame.currentTurn = int(file_lines[-1][0])
     currentGame.gameFile.close()
 
-    print('\nMaxConnect-4 game\n')
+    print('\nWelcome to MaxConnect-4\n\n')
+    input("Press ENTER to continue...")
+    print(chr(27) + "[2J")
     print('Game state before move:')
     currentGame.printGameBoard()
 
     # Update a few game variables based on initial state and print the score
-    currentGame.checkPieceCount()
     currentGame.countScore()
     print('Score: Player 1 = %d, Player 2 = %d\n' % (currentGame.player1Score, currentGame.player2Score))
 
     if game_mode == 'interactive':
-        firstPlayer = argv[3]
-
-        interactiveGame(currentGame, firstPlayer) 
-    elif game_mode == 'one-move':
-        # Set up the output file
+        interactiveGame(currentGame, depth, nextPlayer, inFile) 
+    else:
         outFile = argv[3]
         try:
             currentGame.outFile = open(outFile, 'w')
         except:
             sys.exit('Error opening output file.')
-        oneMoveGame(currentGame) # Be sure to pass any other arguments from the command line you might need.
+        oneMoveGame(currentGame, depth) 
 
-
-if __name__ == '__main__':
-    main(sys.argv)
+if __name__ == "__main__": main(sys.argv)
