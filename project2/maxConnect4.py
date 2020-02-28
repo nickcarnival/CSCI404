@@ -29,6 +29,7 @@ def oneMoveGame(currentGame, depth):
 
 def interactiveGame(currentGame, depth, nextPlayer, inFile):
 
+    # Step 5
     if nextPlayer == "human-next":
         while currentGame.checkPieceCount() != 42:
             try:
@@ -50,17 +51,20 @@ def interactiveGame(currentGame, depth, nextPlayer, inFile):
 
             print("Your Move:")
             currentGame.printGameBoard()
+            currentGame.printGameBoardToFile("human")
             if currentGame.checkPieceCount() != 42:
                 if currentGame.currentTurn == 1: currentGame.currentTurn = 2
                 elif currentGame.currentTurn == 2: currentGame.currentTurn = 1
                 currentGame.aiPlay(int(depth))
                 print("Computer's Move:")
                 currentGame.printGameBoard()
+                currentGame.printGameBoardToFile("computer")
                 currentGame.countScore()
                 print('Score: Player 1 = %d, Player 2 = %d\n' % (currentGame.player1Score, currentGame.player2Score))
     else:
         currentGame.aiPlay(int(depth))
         currentGame.printGameBoard()
+        currentGame.printGameBoardToFile("computer")
         currentGame.countScore()
         print('Score: Player 1 = %d, Player 2 = %d\n' % (currentGame.player1Score, currentGame.player2Score))
         interactiveGame(currentGame, depth, "human-next", inFile)
